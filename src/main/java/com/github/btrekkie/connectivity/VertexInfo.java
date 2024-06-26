@@ -7,7 +7,7 @@ import java.util.Map;
  * Describes a ConnVertex, with respect to a particular ConnGraph. There is exactly one VertexInfo object per vertex in
  * a given graph, regardless of how many levels the vertex is in. See the comments for the implementation of ConnGraph.
  */
-class VertexInfo {
+public class VertexInfo {
     /** The representation of the vertex in the highest level. */
     public EulerTourVertex vertex;
 
