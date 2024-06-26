@@ -820,6 +820,9 @@ public class ConnGraph {
         if (info1 == null) {
             return false;
         }
+        int originalComponentSize = info1.vertex.arbitraryVisit.root().size;
+        Object originalComponentAugmentation = (info1.vertex.arbitraryVisit.root().hasAugmentation) ? info1.vertex.arbitraryVisit.root().augmentation : null;
+
         ConnEdge edge = removeFromEdgeMap(info1, vertex2);
         if (edge == null) {
             return false;
@@ -894,6 +897,15 @@ public class ConnGraph {
                     lowerEdge = levelEdge;
                     replacementVertex1 = replacementVertex1.higherVertex;
                     replacementVertex2 = replacementVertex2.higherVertex;
+                }
+            } else {
+                if (originalComponentAugmentation != null) {
+                    int leftComponentSize = levelVertex1.arbitraryVisit.root().size;
+                    int rightComponentSize = levelVertex2.arbitraryVisit.root().size;
+
+                    Object[] augmentations = levelVertex1.arbitraryVisit.root().augmentationFunc.split(originalComponentAugmentation, leftComponentSize, rightComponentSize, originalComponentSize);
+                    levelVertex1.arbitraryVisit.root().augmentation = augmentations[0];
+                    levelVertex2.arbitraryVisit.root().augmentation = augmentations[1];
                 }
             }
         }
@@ -1043,6 +1055,29 @@ public class ConnGraph {
             return info.vertex.arbitraryVisit.root().hasAugmentation;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Augments the root of a connected component.
+     * @param vertex A target vertex in the connected component.
+     * @param rootAugmentation The augmentation to apply to the root of the connected component.
+     * @return The augmentation that was previously associated with the root. Returns null if there was not one.
+     */
+    public Object augmentComponent(ConnVertex vertex, Object rootAugmentation) {
+        assertIsAugmented();
+        VertexInfo info = vertexInfo.get(vertex);
+        if (info != null) {
+            EulerTourNode root = info.vertex.arbitraryVisit.root();
+            Object oldAugmentation = root.augmentation;
+            if (!root.hasAugmentation || rootAugmentation != null ? rootAugmentation.equals(root.augmentation) : root.augmentation != null) {
+                root.hasAugmentation = true;
+                root.augmentation = rootAugmentation;
+                root.augment();
+            }
+            return oldAugmentation;
+        } else {
+            return null;
         }
     }
 

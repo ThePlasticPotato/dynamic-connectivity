@@ -235,6 +235,26 @@ public class ConnGraphTest {
         assertFalse(graph.componentHasAugmentation(vertices.get(6).get(4)));
     }
 
+    /**
+     * Tests augmentation splitting
+     */
+    @Test
+    public void testSplitting() {
+        ConnGraph graph = new ConnGraph(ComponentTotalValue.AUGMENTATION);
+        Random random = new Random(6170);
+        List<ConnVertex> vertices = new ArrayList<ConnVertex>(10);
+        for (int i = 0; i < 10; i++) {
+            vertices.add(new ConnVertex(random));
+        }
+
+        for (int i = 0; i < 9; i++) {
+            assertTrue(graph.addEdge(vertices.get(i), vertices.get(i + 1));
+        }
+
+        graph.getComponentRoot(vertices.get(1));
+
+    }
+
     /** Tests a graph with a hub-and-spokes subgraph and a clique subgraph. */
     @Test
     public void testWheelAndClique() {
@@ -983,6 +1003,13 @@ public class ConnGraphTest {
                     return null;
                 }
             }
+
+            @Override
+            public Object[] split(Object originalAugmentation, int leftSize, int rightSize, int leftOriginalSize) {
+                return new Object[0];
+            }
+
+
         };
 
         ConnGraph graph = new ConnGraph(augmentation);

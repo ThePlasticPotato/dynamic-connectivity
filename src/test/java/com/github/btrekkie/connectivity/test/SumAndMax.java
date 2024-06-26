@@ -12,6 +12,11 @@ class SumAndMax {
             SumAndMax sumAndMax2 = (SumAndMax)value2;
             return new SumAndMax(sumAndMax1.sum + sumAndMax2.sum, Math.max(sumAndMax1.max, sumAndMax2.max));
         }
+
+        @Override
+        public Object[] split(Object originalAugmentation, int leftSize, int rightSize, int leftOriginalSize) {
+            return new Object[0];
+        }
     };
 
     public final int sum;

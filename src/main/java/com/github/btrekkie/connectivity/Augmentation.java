@@ -36,4 +36,14 @@ public interface Augmentation {
      * null.
      */
     public Object combine(Object value1, Object value2);
+
+    /**
+     * Controls the splitting behavior of a root augmentation when a component is split into two.
+     * @param originalAugmentation The augmentation on the original component.
+     * @param leftSize The size of the left component.
+     * @param rightSize The size of the right component.
+     * @param leftOriginalSize The size of the original component.
+     * @return An array containing the augmentations on the left and right components, respectively.
+     */
+    public Object[] split(Object originalAugmentation, int leftSize, int rightSize, int leftOriginalSize);
 }
