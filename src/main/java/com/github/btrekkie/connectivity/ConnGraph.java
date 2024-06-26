@@ -844,6 +844,7 @@ public class ConnGraph {
             return false;
         }
         EulerTourNode oldRoot = info1.vertex.arbitraryVisit.root();
+        int oldSize = oldRoot.size;
         ConnEdge edge = removeFromEdgeMap(info1, vertex2);
         if (edge == null) {
             return false;
@@ -921,7 +922,7 @@ public class ConnGraph {
                 }
             } else {
                 if (splitEmitter != null) {
-                    splitEmitter.onSplit(vertex1, vertex2, levelVertex1.arbitraryVisit.root(), levelVertex2.arbitraryVisit.root(), oldRoot);
+                    splitEmitter.onSplit(vertex1, vertex2, oldSize, levelVertex1.arbitraryVisit.root(), levelVertex2.arbitraryVisit.root(), oldRoot);
                 }
             }
         }
