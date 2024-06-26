@@ -118,6 +118,8 @@ public class ConnGraph {
     /** The augmentation function for the graph, if any. */
     private final Augmentation augmentation;
 
+    public final SplitEmitter splitEmitter;
+
     /**
      * A map from each vertex in this graph to information about the vertex in this graph. If a vertex has no adjacent
      * edges and no associated augmentation, we remove it from vertexInfo, to save time and space. Lookups take O(1)
@@ -142,11 +144,23 @@ public class ConnGraph {
     /** Constructs a new ConnGraph with no augmentation. */
     public ConnGraph() {
         augmentation = null;
+        splitEmitter = null;
     }
 
     /** Constructs an augmented ConnGraph, using the specified function to combine augmentation values. */
     public ConnGraph(Augmentation augmentation) {
         this.augmentation = augmentation;
+        splitEmitter = null;
+    }
+
+    public ConnGraph(SplitEmitter splitEmitter) {
+        augmentation = null;
+        this.splitEmitter = splitEmitter;
+    }
+
+    public ConnGraph(Augmentation augmentation, SplitEmitter splitEmitter) {
+        this.augmentation = augmentation;
+        this.splitEmitter = splitEmitter;
     }
 
     /** Equivalent implementation is contractually guaranteed. */
@@ -820,6 +834,7 @@ public class ConnGraph {
         if (info1 == null) {
             return false;
         }
+        EulerTourNode oldRoot = info1.vertex.arbitraryVisit.root();
         ConnEdge edge = removeFromEdgeMap(info1, vertex2);
         if (edge == null) {
             return false;
@@ -894,6 +909,10 @@ public class ConnGraph {
                     lowerEdge = levelEdge;
                     replacementVertex1 = replacementVertex1.higherVertex;
                     replacementVertex2 = replacementVertex2.higherVertex;
+                }
+            } else {
+                if (splitEmitter != null) {
+                    splitEmitter.onSplit(vertex1, vertex2, levelVertex1.arbitraryVisit.root(), levelVertex2.arbitraryVisit.root(), oldRoot);
                 }
             }
         }

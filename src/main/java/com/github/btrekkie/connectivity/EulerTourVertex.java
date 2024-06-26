@@ -5,7 +5,7 @@ package com.github.btrekkie.connectivity;
  * level it appears in. Note that different vertices may appear in different numbers of levels, as EulerTourVertex
  * objects are only created for lower levels as needed. See the comments for the implementation of ConnGraph.
  */
-class EulerTourVertex {
+public class EulerTourVertex {
     /**
      * The representation of this edge in the next-lower level. lowerVertex is null if this is the lowest-level
      * representation of this vertex.
