@@ -126,7 +126,7 @@ public class ConnGraph {
      * expected time and O(log N / log log N) time with high probability, because vertexInfo is a HashMap, and
      * ConnVertex.hashCode() returns a random integer.
      */
-    private Map<ConnVertex, VertexInfo> vertexInfo = new HashMap<ConnVertex, VertexInfo>();
+    public Map<ConnVertex, VertexInfo> vertexInfo = new HashMap<ConnVertex, VertexInfo>();
 
     /**
      * Ceiling of log base 2 of the maximum number of vertices in this graph since the last rebuild. This is 0 if that
@@ -588,7 +588,9 @@ public class ConnGraph {
             return false;
         }
         VertexInfo info2 = ensureInfo(connVertex2);
-
+        boolean didMerge = false;
+        EulerTourNode mergeRoot1 = info1.vertex.arbitraryVisit.root();
+        EulerTourNode mergeRoot2 = info2.vertex.arbitraryVisit.root();
         EulerTourVertex vertex1 = info1.vertex;
         EulerTourVertex vertex2 = info2.vertex;
         ConnEdge edge = new ConnEdge(vertex1, vertex2);
@@ -602,10 +604,17 @@ public class ConnGraph {
             augmentAncestorFlags(vertex1.arbitraryVisit);
             augmentAncestorFlags(vertex2.arbitraryVisit);
             edge.eulerTourEdge = addForestEdge(vertex1, vertex2);
+            didMerge = true;
         }
 
         addToEdgeMap(edge, info1, connVertex2);
         addToEdgeMap(edge, info2, connVertex1);
+
+        if (didMerge) {
+            if (splitEmitter != null) {
+                splitEmitter.onMerge(connVertex1, connVertex2, mergeRoot1, mergeRoot2, info1.vertex.arbitraryVisit.root());
+            }
+        }
         return true;
     }
 
