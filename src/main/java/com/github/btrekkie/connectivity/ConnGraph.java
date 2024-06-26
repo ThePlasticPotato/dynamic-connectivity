@@ -921,8 +921,8 @@ public class ConnGraph {
                     replacementVertex2 = replacementVertex2.higherVertex;
                 }
             } else {
-                if (splitEmitter != null) {
-                    splitEmitter.onSplit(vertex1, vertex2, oldSize, levelVertex1.arbitraryVisit.root(), levelVertex2.arbitraryVisit.root(), oldRoot);
+                if (splitEmitter != null && oldRoot != null) {
+                    splitEmitter.onSplit(vertex1, vertex2, oldSize, info1.vertex.arbitraryVisit.root(), info2.vertex.arbitraryVisit.root(), oldRoot);
                 }
             }
         }
